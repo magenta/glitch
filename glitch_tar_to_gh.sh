@@ -28,6 +28,12 @@ for file in *.tgz; do
       rm -rf "$temp_dir/app/.git"
     fi
 
+    # Remove the .git directory if it exists inside the app folder
+    if [ -d "$temp_dir/app/node_modules" ]; then
+      echo "Found node_modules directory in '$file'. Removing it."
+      rm -rf "$temp_dir/app/node_modules"
+    fi
+
     # Move and rename the 'app' directory to the desired NAME
     mv "$temp_dir/app" "$NAME"
     echo "Extracted '$file' and renamed 'app' to '$NAME'."
