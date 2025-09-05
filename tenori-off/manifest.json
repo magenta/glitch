@@ -1,0 +1,21 @@
+{
+  "name": "tenori-off",
+  "short_name": "",
+  "description": "Simple music sequencer",
+  "start_url": "index.html",
+  "display": "standalone",
+  "theme_color": "#E61E8C",
+  "background_color": "#E61E8C",
+  "icons": [
+    {
+      "src": "images/manifest/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/manifest/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

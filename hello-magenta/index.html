@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Making music with magenta.js</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- These imports are needed for the CodeMirror snippets to work -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.28.0/codemirror.min.js"></script>
+  <link rel="stylesheet" href="https://js.tensorflow.org/css/vendor/codemirror.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.28.0/theme/dracula.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.28.0/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.28.0/mode/xml/xml.min.js"></script>
+
+  <!-- This imports magenta.js on the page -->
+  <script src="https://cdn.jsdelivr.net/npm/@magenta/music@1.18.1"></script>
+
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <div class="content">
+    <h1>Making music with magenta.js</h1>
+
+    <p><a href="https://magenta.tensorflow.org/">Magenta.js</a> is a JavaScript library that helps you generate art and music
+      on the web. In this tutorial, we'll talk about the music generation bits in <code>@magenta/music</code> -- how to make your browser sing, and in particular,
+      how to make your browser sing <em>like you</em>!</p>
+    <p>As a library, <code>@magenta/music</code> can help you:</p>
+    <ol>
+      <li>make music in the browser by having some neat abstractions over the WebAudio API.</li>
+      <li>use Machine Learning models to generate music in the browser.</li>
+    </ol>
+
+    <h2>Table of contents</h2>
+    <ul class="toc">
+      <li><a href="#step0">Step 0: First things first!</a></li>
+      <li><a href="#step1">Step 1: Making sounds with your browser</a></li>
+      <ul>
+        <li><a href="#playing-a-notesequence">Playing a NoteSequence</a></li>
+        <li><a href="#visualizing-a-notesequence">Visualizing a NoteSequence</a></li>
+        <li><a href="#useful-helpers">Useful helpers</a></li>
+      </ul>
+      <li><a href="#step2">Step 2: Using Machine Learning to make music</a></li>
+      <ul>
+        <li><a href="#musicrnn">MusicRNN</a></li>
+        <li><a href="#musicvae">MusicVAE</a></li>
+        <ul>
+          <li><a href="#creating-new-sequences">Creating new sequences</a></li>
+          <li><a href="#interpolating-between-two-sequences">Interpolating between two sequences</a></li>
+        </ul>
+      </ul>
+    </ul>
+
+    <h2 id="step0">Step 0: First things first!</h2>
+    <p>If you're going to use Magenta, you need to add it to your page. Add this somewhere in your page's <code>head</code> element (it's
+      also available as a module which you can install via <a href="https://github.com/tensorflow/magenta-js/tree/master/music#via-npm">npm</a>):</p>
+
+    <textarea class="sample" mode="xml">
+      &lt;script src="https://cdn.jsdelivr.net/npm/@magenta/music@^1.0.0"&gt;&lt;/script&gt;
+    </textarea>
+
+    <h2 id="step1">Step 1: Making sounds with your browser</h2>
+    <p>Everything in <code>@magenta/music</code> is centered around <a href="https://magenta.github.io/magenta-js/music/modules/_core_sequences_.html"><code>NoteSequences</code></a>.
+      This is an abstract representation of a series of notes, each with different pitches, instruments and strike velocities, much like 
+      <a href="https://en.wikipedia.org/wiki/MIDI">MIDI</a>.</p>
+    <p>For example, this is a <code>NoteSequence</code> that represents "Twinkle Twinkle Little Star". Try changing the
+      pitches to see how the sound changes!</p>
+
+    <div class="controls">
+      <button onclick="startOrStop(event, player)">Play</button>
+      <div>Editable</div>
+    </div>
+    <textarea class="sample" editable mode="javascript">
+TWINKLE_TWINKLE = {
+  notes: [
+    {pitch: 60, startTime: 0.0, endTime: 0.5},
+    {pitch: 60, startTime: 0.5, endTime: 1.0},
+    {pitch: 67, startTime: 1.0, endTime: 1.5},
+    {pitch: 67, startTime: 1.5, endTime: 2.0},
+    {pitch: 69, startTime: 2.0, endTime: 2.5},
+    {pitch: 69, startTime: 2.5, endTime: 3.0},
+    {pitch: 67, startTime: 3.0, endTime: 4.0},
+    {pitch: 65, startTime: 4.0, endTime: 4.5},
+    {pitch: 65, startTime: 4.5, endTime: 5.0},
+    {pitch: 64, startTime: 5.0, endTime: 5.5},
+    {pitch: 64, startTime: 5.5, endTime: 6.0},
+    {pitch: 62, startTime: 6.0, endTime: 6.5},
+    {pitch: 62, startTime: 6.5, endTime: 7.0},
+    {pitch: 60, startTime: 7.0, endTime: 8.0},  
+  ],
+  totalTime: 8
+};
+    </textarea>
+
+    <p>A special feature of <code>NoteSequences</code> is how they keep time. Sequences can be:</p>
+    <ul>
+      <li><strong>unquantized</strong> -- which means the notes are defined as starting and ending at a particular time interval,
+        in seconds. The "Twinkle Twinkle Little Star" sequence above was an example of this.</li>
+      <li><strong>quantized</strong> -- which means the notes are defined in terms of "steps"; the duration of the steps
+        can be configured per quarter note. For example, in the unquantized sequence below, there are 4 steps per quarter note,
+        and the duration is determined by the qpm (quarter notes per minute). Try adjusting the <code>qpm</code> value to hear the tempo change.</li>
+    </ul>
+    <br>
+    
+    <div class="controls">
+      <button onclick="startOrStop(event, player, DRUMS)">Play</button>
+      <div>Editable</div>
+    </div>
+    <textarea class="sample" editable mode="javascript">
+DRUMS = {
+  notes: [
+    { pitch: 36, quantizedStartStep: 0, quantizedEndStep: 1, isDrum: true },
+    { pitch: 38, quantizedStartStep: 0, quantizedEndStep: 1, isDrum: true },
+    { pitch: 42, quantizedStartStep: 0, quantizedEndStep: 1, isDrum: true },
+    { pitch: 46, quantizedStartStep: 0, quantizedEndStep: 1, isDrum: true },
+    { pitch: 42, quantizedStartStep: 2, quantizedEndStep: 3, isDrum: true },
+    { pitch: 42, quantizedStartStep: 3, quantizedEndStep: 4, isDrum: true },
+    { pitch: 42, quantizedStartStep: 4, quantizedEndStep: 5, isDrum: true },
+    { pitch: 50, quantizedStartStep: 4, quantizedEndStep: 5, isDrum: true },
+    { pitch: 36, quantizedStartStep: 6, quantizedEndStep: 7, isDrum: true },
+    { pitch: 38, quantizedStartStep: 6, quantizedEndStep: 7, isDrum: true },
+    { pitch: 42, quantizedStartStep: 6, quantizedEndStep: 7, isDrum: true },
+    { pitch: 45, quantizedStartStep: 6, quantizedEndStep: 7, isDrum: true },
+    { pitch: 36, quantizedStartStep: 8, quantizedEndStep: 9, isDrum: true },
+    { pitch: 42, quantizedStartStep: 8, quantizedEndStep: 9, isDrum: true },
+    { pitch: 46, quantizedStartStep: 8, quantizedEndStep: 9, isDrum: true },
+    { pitch: 42, quantizedStartStep: 10, quantizedEndStep: 11, isDrum: true },
+    { pitch: 48, quantizedStartStep: 10, quantizedEndStep: 11, isDrum: true },
+    { pitch: 50, quantizedStartStep: 10, quantizedEndStep: 11, isDrum: true },
+  ],
+  quantizationInfo: {stepsPerQuarter: 4},
+  tempos: [{time: 0, qpm: 120}],
+  totalQuantizedSteps: 11
+};
+    </textarea>
+
+    <h3 id="playing-a-notesequence">Playing a NoteSequence</h3>
+
+    <p>When you pressed the "Play" button above, this started or stopped a <a href="https://magenta.github.io/magenta-js/music/modules/_core_player_.html"><code>Player</code></a>.
+      There are several kinds of players in <code>@magenta/music</code>-- the default player uses a built in "synth" sound to make the sounds. A different
+      kind of player is a <a href="https://magenta.github.io/magenta-js/music/classes/_core_player_.soundfontplayer.html"><code>SoundFontPlayer</code></a>,
+      which lets you use real sounds for any of the notes played. </p>
+    <p>In the example below, try uncommenting the SoundFont player to see how that affects the sound of the NoteSequence. We're still using the 
+      "Twinkle Twinkle Little Star" from above, and whatever changes you've made to it are persisisting. If you accidentally broke the
+      sequence, just refresh the page! 😅</p>
+
+    <div class="controls">
+      <button onclick="startOrStop(event, player)">Play</button>
+      <div>Editable</div>
+    </div>
+    <textarea class="sample" editable mode="javascript">
+player = new mm.Player();
+
+// player = new mm.SoundFontPlayer('https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus');
+
+// Players can also play at a different tempo
+//player.setTempo(200);
+    </textarea>
+
+    <p>And you control the player with:</p>
+    <textarea class="sample" mode="javascript">
+player.start(TWINKLE_TWINKLE);
+player.stop();
+    </textarea>
+
+    <p>Players also have the ability to call a <code>callback</code> method after every note that is played. This is extremely
+      useful if you want to update a visualization as a result of playing a NoteSequence, which we will see below.</p>
+
+    <h3 id="visualizing-a-notesequence">Visualizing a NoteSequence</h3>
+
+    <p>Listening to NoteSequences is great, but sometimes it's useful to look at a piano roll representing the notes. <code>@magenta/music</code>
+      has a built-in <a href="https://magenta.github.io/magenta-js/music/classes/_core_visualizer_.visualizer.html"><code>Visualizer</code></a> for that, 
+      which paints the notes to a canvas, and updates them using a Player's callback:</p>
+
+    <div class="controls">
+      <button onclick="startOrStop(event, vizPlayer)">Play</button>
+    </div>
+    <div class="canvas-container">
+      <canvas id="canvas2"></canvas>
+    </div>
+    <textarea class="sample" mode="javascript">
+viz = new mm.Visualizer(TWINKLE_TWINKLE, document.getElementById('canvas'));
+
+vizPlayer = new mm.Player(false, {
+  run: (note) => viz.redraw(note),
+  stop: () => {console.log('done');}
+});
+    </textarea>
+
+    <p>You can <a href="https://magenta.github.io/magenta-js/music/interfaces/_core_visualizer_.visualizerconfig.html">configure</a>
+      a visualizer's appearance, such as the size and colours of the notes. Try changing the values below and seeing how
+      the piano roll is updated!</p>
+    <div class="controls">
+      <div style="visibility:hidden"></div>
+      <div>Editable</div>
+    </div>
+    <div class="canvas-container">
+      <canvas id="canvas"></canvas>
+    </div>
+    <textarea class="sample" editable mode="javascript">
+config = {
+  noteHeight: 6,
+  pixelsPerTimeStep: 30,  // like a note width
+  noteSpacing: 1,
+  noteRGB: '8, 41, 64',
+  activeNoteRGB: '240, 84, 119',
+}
+// Don't edit this line unless you want to break things. :)
+visualizer = new mm.Visualizer(TWINKLE_TWINKLE, document.getElementById('canvas'), config);
+    </textarea>
+
+    <h3 id="useful-helpers">Useful helpers</h3>
+
+    <p>There are a lot of other helper methods sprinkled around the <code>@magenta/music</code> codebase that you might need but not know where
+      to find. Here are some of my favourites:</p>
+    <ul>
+      <li><a href="https://magenta.github.io/magenta-js/music/modules/_core_midi_io_.html">converting</a> between MIDI and NoteSequences</li>
+      <li><a href="https://magenta.github.io/magenta-js/music/modules/_core_sequences_.html#quantizenotesequence">quantizing</a>
+        an unquantized NoteSequence</li>
+      <li><a href="https://magenta.github.io/magenta-js/music/classes/_core_recorder_.recorder.html">recording events</a>
+        from a MIDI instrument</li>
+    </ul>
+
+    <h2 id="step2">Step 2: Using Machine Learning to make music</h2>
+
+    <p><code>@magenta/music</code> has several Machine Learning models, each with different strengths:</p>
+    <ul>
+      <li><a href="https://magenta.github.io/magenta-js/music/classes/_music_rnn_model_.musicrnn.html">MusicRNN</a> -
+        you give it a NoteSequence, and it continues it in the style of your original NoteSequence.</li>
+      <li><a href="hhttps://magenta.github.io/magenta-js/music/classes/_music_vae_model_.musicvae.html">MusicVAE</a> -
+        generates brand new NoteSequences or interpolates between two sequences.</li>
+      <li><a href="https://magenta.github.io/magenta-js/music/classes/_transcription_model_.onsetsandframes.html">Onsets
+          and Frames</a> -- transcribes piano audio</li>
+    </ul>
+
+    <p>The models are built with <a href="https://js.tensorflow.org">Tensorflow.js</a>, so they run directly in the browser,
+      using WebGL shaders (so that they won't be unbelievably slow)</p>
+    
+    <p>Now that we know how to use <code>NoteSequences</code> and <code>Players</code>, adding some basic Machine Learning is a continuation of that.
+      The pattern for using any of these models is:</p>
+    <ol>
+      <li>Load <code>@magenta/music</code> (which we already know how to do!)</li>
+      <li>Create a model from a checkpoint (i.e. where the weights, or the encoding, of the model lives)</li>
+      <li>Ask the model to do something.</li>
+    </ol>
+
+    <h3 id="musicrnn">MusicRNN</h3>
+
+    <p>A MusicRNN is an <a href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/">LSTM-based </a> language model for musical notes -- 
+      it is best at continuing a NoteSequence that you give it.</p>
+    
+    <p>To use it, you need to give it a sequence to continue -- when it's ready, the model will return a Promise containing
+      the following sequence. </p>
+
+    <div class="controls">
+      <button onclick="playRNN(event)">Play</button>
+    </div>
+    <textarea class="sample" mode="javascript">
+// Initialize the model.
+music_rnn = new mm.MusicRNN('https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/basic_rnn');
+music_rnn.initialize();
+
+// Create a player to play the sequence we'll get from the model.
+rnnPlayer = new mm.Player();
+
+function play() {
+  if (rnnPlayer.isPlaying()) {
+    rnnPlayer.stop();
+    return;
+  }
+      
+  // The model expects a quantized sequence, and ours was unquantized:
+  const qns = mm.sequences.quantizeNoteSequence(ORIGINAL_TWINKLE_TWINKLE, 4);
+  music_rnn
+  .continueSequence(qns, rnn_steps, rnn_temperature)
+  .then((sample) => rnnPlayer.start(sample));
+}
+    </textarea>
+
+    <p>With Music RNN, you can configure the number of steps the new sequence will be, as well as the "temperature" of the
+      result -- the higher the temperature, the more random (and less like the input) your sequence will be. You can play
+      around with these values and see how the resulting sequences are different:</p>
+
+    <div class="controls">
+      <button onclick="playRNN(event)">Play</button>
+      <div>Editable</div>
+    </div>
+    <textarea class="sample" editable mode="javascript">
+rnn_steps = 20;
+rnn_temperature = 1.5;
+    </textarea>
+
+    <p>Music RNN has <a href="https://github.com/tensorflow/magenta-js/blob/master/music/checkpoints/README.md">other checkpoints</a>
+      you can use, which are trained on different melodies and instruments. For example, <code>drum_kit_rnn</code> makes
+      new drum sequences.</p>
+
+    <h3 id="musicvae">MusicVAE</h3>
+
+    <p>A <a href="https://g.co/magenta/musicvae">MusicVAE</a> is a variational autoencoder made up of an Encoder and Decoder -- you can think of the encoder as trying
+      to summarize all the data you give it, and the decoder as trying to recreate the original data, based on this summarized
+      version. As a generative model, you can think of a VAE as coming up with new sequences that could be a decoding of
+      some summarized version.</p>
+    <p>The Music VAE implementation in <code>@magenta/music</code>in particular does two things: it can create new sequences 
+      (which are reconstructions or variations of the input data), or it can interpolate between two.</p>
+
+    <h4 id="creating-new-sequences">Creating new sequences</h4>
+
+    <div class="controls">
+      <button onclick="playVAE(event)">Play</button>
+    </div>
+    <textarea class="sample" mode="javascript">
+// Initialize the model.
+music_vae = new mm.MusicVAE('https://storage.googleapis.com/magentadata/js/checkpoints/music_vae/mel_4bar_small_q2');
+music_vae.initialize();
+
+// Create a player to play the sampled sequence.
+vaePlayer = new mm.Player();
+
+function playVAE() {
+  if (vaePlayer.isPlaying()) {
+    vaePlayer.stop();
+    return;
+  }
+  music_vae
+  .sample(1, vae_temperature)
+  .then((sample) => vaePlayer.start(sample[0]));
+}
+    </textarea>
+
+    <p>As before, changing the temperature changes the randomness of the result.</p>
+
+    <div class="controls">
+      <button onclick="playVAE(event)">Play</button>
+      <div>Editable</div>
+    </div>
+    <textarea class="sample" editable mode="javascript">
+vae_temperature = 1.5;
+    </textarea>
+
+    <h4 id="interpolating-between-two-sequences">Interpolating between two sequences</h4>
+
+    <div class="controls">
+      <button onclick="playInterpolation(event)">Play</button>
+    </div>
+    <textarea class="sample" mode="javascript">
+// We are reusing the same music_vae and vae_player from the previous example.
+
+function playInterpolation() {
+  if (vaePlayer.isPlaying()) {
+    vaePlayer.stop();
+    return;
+  }
+  // Music VAE requires quantized melodies, so quantize them first.
+  const star = mm.sequences.quantizeNoteSequence(TWINKLE_TWINKLE, 4);
+  const teapot = mm.sequences.quantizeNoteSequence(LITTLE_TEAPOT, 4);
+  music_vae
+  .interpolate([star, teapot], 4)
+  .then((sample) => {
+    const concatenated = mm.sequences.concatenate(sample);
+    vaePlayer.start(concatenated);
+  });
+}
+      
+    </textarea>
+
+  <hr>
+  <p>
+    You're now ready to build your own amazing, Machine Learning powered, music instrument! If you want more information, you can check out:
+    <ul>
+      <li>some <a href="https://magenta.tensorflow.org/demos">demos</a> <code>#MadeWithMagenta</code></li>
+      <li>the <a href="https://magenta.github.io/magenta-js/music/">documentation</a></li>
+      <li>the <a href="https://magenta.tensorflow.org/blog">Magenta blog</a>, which talks about all the mathy bits we skipped.</li>
+    </ul>
+  </p>
+  <p>
+    Have fun! 💕
+  </p>
+  </div>
+
+  <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
+  <script src="https://button.glitch.me/button.js"></script>
+</body>
+
+<script src="./script.js"></script>
+
+</html>

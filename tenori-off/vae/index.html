@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>✨🎧 tenori-off</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Monoton&text=tenori-f" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <h1>tenori-off</h1>
+  
+    <button class="controls glitcheroni synth" id="btnSynth" onclick="playSynth()" title="Adding synth sounds">
+      Synth
+    </button>
+    <button class="controls glitcheroni" id="btnDrums" onclick="playDrums()" title="Adding drum sounds">
+      Drums
+    </button>
+    <button class="controls glitcheroni" onclick="autoDrums()" id="btnAuto" not-loaded title="Improvise drums using Machine Learning">
+      Load ML(~10Mb)
+    </button>
+    <br>
+    <label class="controls glitcheroni">Step<input placeholder="100" type="number" value="100" id="input">ms</label>
+    <button class="controls glitcheroni" id="btnPlay" onclick="playOrPause()">
+      Play! 
+    </button>
+    <button class="controls glitcheroni" onclick="reset(true)">
+      Reset
+    </button>
+    <button class="controls glitcheroni" onclick="showHelp()" title="Help">
+      ?
+    </button>
+    <br><br>
+    
+    <div class="dialog glitcheroni" id="help" hidden>
+      <h2>What is this?</h2>
+      <p>
+        A ✨<a href="https://en.wikipedia.org/wiki/Tenori-on">Tenori-on</a>✨ is a dope electronic music
+        instrument sequencer thingie that Yamaha made for a hot minute.  
+        I love pixels and patterns and generating things out of pixels and patterns, which means
+        I LOVE the Tenori-on. Since they're rare and
+        mad <a href="https://reverb.com/item/11642149-yamaha-tenori-on">expensive</a>, I've never seen one,
+        so I made a JavaScript version of what I think it looks like.
+      </p>
+      <p>
+        You can change between <b>drums</b> or a <b>synth</b> sound (also using the <b>D</b> or <b>S</b> keys).
+        The URL also holds the state, so you can send it to a pal to have them 
+        listen to your masterpiece. If you hit a bug, refreshing usually makes it go away.
+      </p>
+      <p>
+        The <b>Improvise</b> button will auto generate drums to match your synth using 
+        ~*machine learning*~ via <a href="https://magenta.tensorflow.org/js">Magenta.js</a>
+        and a recurrent neural network. In the browser!!
+      </p>
+      <p>
+        Ok, go make fun shit now and tell me about it!
+      </p>
+      <button class="controls glitcheroni" onclick="showHelp()">Ok I will!!</button>
+      <p>
+        (🙏 thanks to <a href="https://twitter.com/holman">Zach</a>, <a href="https://twitter.com/dassurma">Surma</a> and 
+        <a href="https://twitter.com/kosamari">Mariko</a> for providing a sample!)
+      </p>
+    </div>
+    
+    <div class="dialog glitcheroni" id="settings" hidden>
+      <h2>Magenta.js settings</h2>
+      <br>
+      <div>
+        Use the: <br>
+        <label class="radio">
+          <input name="model" type="radio" id="radioRnn">
+          <span class="control-indicator glitcheroni"></span>
+          RNN
+        </label>
+        <label class="radio">
+          <input name="model" type="radio" id="radioVae" checked>
+          <span class="control-indicator glitcheroni"></span>
+          VAE
+        </label>
+        <br><br>
+        Feed the synth input as drums to the model (useful in the VAE drums_2bar_lokl_small, but not necesarily in the RNN model)<br>
+        <label class="radio">
+          <input name="drum" type="radio" id="radioForceDrumYes" checked>
+          <span class="control-indicator glitcheroni"></span>
+          Yes
+        </label>
+        <label class="radio">
+          <input name="drum" type="radio" id="radioForceDrumNo">
+          <span class="control-indicator glitcheroni"></span>
+          No
+        </label>
+        <br><br>
+        
+        <label>
+          Model name (from the list of <a href="https://goo.gl/magenta/js-checkpoints">checkpoint IDs</a>):<br>
+          <input class="glitcheroni text" value="drums_2bar_lokl_small" id="modelName">
+        </label>
+      </div>
+      <br>
+      <button class="controls glitcheroni" onclick="showSettings()">Close and re-initialize</button>
+    </div>
+    
+    <div class="container" id="container"></div>  
+   
+    <br>
+    
+    <h3 class="samples">
+      samples
+    </h3>
+    <button class="controls glitcheroni" onclick="loadDemo(1)">1</button>
+    <button class="controls glitcheroni" onclick="loadDemo(2)">2</button>
+    <button class="controls glitcheroni" onclick="loadDemo(3)">3</button>
+    <button class="controls glitcheroni" onclick="loadDemo(4)">4</button>
+    <button class="controls glitcheroni" onclick="loadDemo(5)">5</button>
+    
+    <!-- include the Glitch button to show what the webpage is about and
+          to make it easier for folks to view source and remix -->
+    <div class="glitchButton" style="position:fixed;top:4px;right:4px;"></div>
+    <script src="https://button.glitch.me/button.js"></script>
+    
+    <footer>
+      I have no idea what I'm doing, a <a href="https://twitter.com/notwaldorf">Meownica</a> production.
+    </footer>
+  </body>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@magenta/music@1.1.5"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/0.7.1/Tone.min.js"></script>
+  
+  <!-- these could be a module with imports -->
+  <script src="./helpers.js"></script>
+  <script src="./script.js" defer></script>
+</html>

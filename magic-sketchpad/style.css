@@ -1,0 +1,232 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  overscroll-behavior-y: contain;
+}
+
+body {
+  font-family: 'IBM Plex Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  --primary: #4545CC;
+  --secondary: #8EE3C8;
+}
+
+* { box-sizing: border-box; }
+
+h1 {
+  color: var(--primary);
+  font-size: 60px;
+}
+
+p {
+  padding: 24px 0;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+a:link, a:visited {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  border-bottom: 4px solid var(--secondary);
+}
+a:hover {
+  background: var(--secondary);
+  color: var(--primary);
+}
+
+header {
+  background-color: #F19CC5;
+  width: 100%;
+  padding: 0 20px;
+  border-bottom: 8px solid var(--secondary);
+}
+
+#splash {
+  background-color: #F19CC5;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 40px;
+  border-top: 10px solid var(--secondary);
+  overflow: auto;
+  transition: 1s transform;
+  transform: translate3d(0, 0, 0);
+  z-index: 2;
+}
+
+#splash.hidden {
+  transform: translate3d(0, -200%, 0);
+}
+
+#splash .content {
+  color: white;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+#loaded {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%; 
+}
+#loaded.hidden {
+  display: none;
+  pointer-events: none;
+}
+  
+header .wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header .top {
+  height: 84px;
+}
+
+#colorsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 14px;
+  flex-wrap: wrap;
+  max-width: 1000px;
+}
+
+#colorsContainer button {
+  min-width: 30px;
+  min-height: 30px;
+  border: 4px solid transparent;
+  border-radius: 50%;
+  margin: 4px 2px;
+  padding: 0;
+  will-change: transform;
+  transition: transform 0.2 ease;
+}
+#colorsContainer button.active {
+  border: 4px solid white;
+}
+#colorsContainer button:hover { 
+  transform: scale(1.4);
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+}
+
+.box {
+  border: solid var(--primary) 2px;
+  color: var(--primary);
+  fill: var(--primary);
+  background: white;
+  box-shadow: 4px 4px 0 var(--primary);
+  height: 40px;  
+  border-radius: 5px;
+  transition: top 0.2s ease;
+  position: relative;
+  top: 0;
+  vertical-align: middle;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-family: inherit;
+  font-weight: bold;
+  margin: 0 4px;
+}
+
+.big {
+  margin: 24px 0;
+  font-size: 24px;
+  padding: 14px 32px;
+  height: auto;
+}
+
+.box:active {
+  top: 4px;
+  box-shadow: none;
+}
+
+.select-wrapper {
+  display: inline-block;
+  width: 255px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 4px;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-transform: lowercase;
+  font-family: inherit;
+  font-size: 22px;
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  width: 100%;
+}
+
+#sketch {
+  flex-grow: 1;
+  overflow: hidden;
+}
+#sketch.loading {
+  pointer-events: none;
+  opacity: 0.3;
+  filter: blur(3px);
+}
+
+@media screen and (max-width: 700px) {
+  h1 {
+    font-size: 32px;
+  }
+  p {
+    padding: 14px 0;
+    text-align: left;
+    font-size: 18px;
+  }
+  #splash {
+    padding: 24px;
+  }
+  .box {
+    height: 40px;
+    margin: 0 4px;
+  }
+  .big {
+    height: auto;
+  }
+  
+  header .top {
+    flex-direction: column;
+    margin-bottom: 14px;
+    height: auto;
+  }
+  .controls {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .controls .select-wrapper {
+    min-width: 0;
+    font-size: 20px;
+    flex-grow: 1;
+  }
+}

@@ -1,0 +1,637 @@
+/* CSS files add styling rules to your content */
+
+body {
+  font-family: "Lucida Console", Monaco, monospace;
+  margin: 2em;
+}
+
+h1 {
+  font-style: italic;
+  color: #373fff;
+}
+
+#WelcomeScreen {
+  width: 500px;
+  height: 400px;
+  margin-left: 20px;
+  margin-top: 20px;
+  padding: 20px;
+  position: absolute;
+  background-color: yellow;
+}
+#WelcomeTitle {
+  text-align: center;
+}
+p {
+  font-family: "Arial";
+  font-size: 18px;
+}
+.TourButton {
+  background: rgb(82, 138, 229);
+  color: white;
+  border: medium solid;
+  border-color: rgb(18, 63, 135);
+  font-weight: 900;
+  width: 100px;
+  height: 40px;
+  border-radius: 12px;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  cursor: default;
+  position: absolute;
+}
+#TourScreen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
+.TourDiv {
+  margin-left: 20px;
+  margin-top: 0px;
+  padding: 0px;
+  position: absolute;
+  background-color: yellow;
+  visibility: hidden;
+  cursor: default;
+}
+.StepNav {
+  background: rgb(82, 138, 229);
+  color: white;
+  border: medium solid;
+  border-color: rgb(18, 63, 135);
+  font-weight: 900;
+  width: 100px;
+  height: 20px;
+  border-radius: 12px;
+  text-align: center;
+  padding: 0px;
+  cursor: default;
+  position: absolute;
+}
+
+#MLInfoScreen {
+  width: 25%;
+  height: 10%;
+  margin-left: 30%;
+  margin-top: 25%;
+  background-color: yellow;
+  position: absolute;
+  padding: 20px;
+  text-align: center;
+  visibility: hidden;
+  z-index: 7;
+}
+
+#DAW {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  margin-bottom: 0px;
+  visibility: hidden;
+}
+/* Settings for title row */
+#Title {
+  font-family: Impact, Charcoal, sans-serif;
+  font-size: 25px;
+  letter-spacing: 0px;
+  word-spacing: 2px;
+  color: #000000;
+  font-weight: 400;
+  text-decoration: none solid rgb(68, 68, 68);
+  font-style: normal;
+  font-variant: small-caps;
+  text-transform: none;
+  background-color: rgb(212, 198, 198);
+  border: medium solid;
+  border-color: rgb(121, 108, 108);
+  margin-left: 18px;
+  width: 1718px;
+}
+#Author {
+  font-family: "Lucida Console", Monaco, monospace;
+  float:right;
+  font-variant: normal;
+  font-size: 18px;
+  margin-right: 20px;
+  margin-top: 5px;
+}
+
+/* Settings shared by multiple rows */
+.PlayButtonOuter {
+  position:absolute;
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-left: 30px solid rgb(202, 178, 178);
+  border-bottom: 20px solid transparent;
+}
+.PlayButtonInner {
+  position:absolute;
+  width: 0;
+  height: 0;
+  border-top: 14px solid transparent;
+  border-left: 22px solid rgb(121, 108, 108);
+  border-bottom: 14px solid transparent;
+}
+
+/* Settings for options row */
+#Toolbar {
+  border: medium solid;
+  border-color: rgb(121, 108, 108);
+  width: 1718px;
+  margin-left: 18px;
+  height: 55px;
+}
+#PlayDiv {
+  background-color: "#ECE7E7";
+  float: left;
+  width: 65px;
+  height: 55px;
+}
+#mode {
+  width: 70px;
+  float: left;
+  padding-left: 10px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  font-weight: 700;
+  background-color: rgb(212, 198, 198);
+  cursor: default;
+}
+.ToolbarText {
+  width: 90px;
+  float: left;
+  color: black;
+  font-weight: 700;
+  padding-left: 10px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  background: rgb(168, 158, 158);
+  cursor: pointer;
+}
+/* Settings for Time Signature options */
+#TimeSignature {
+  width: 200px;
+  float: left;
+  color: black;
+  font-weight: 700;
+  padding-left: 10px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  background: rgb(212, 198, 198);
+}
+a {
+  text-decoration: none;
+}
+nav {
+  height: 100%;
+}
+ul {
+  background: darkorange;
+  list-style: none;
+  margin: 0;
+  padding-left: 0px;
+  height: 100%;
+  z-index: 3;
+}
+li {
+  color: #fff;
+  background: darkorange;
+  display: block;
+  float: left;
+  position: relative;
+  text-decoration: none;
+  transition-duration: 0.5s;
+  padding-left: 0.2%;
+  padding-right: 0.2%;
+}
+.TSText {
+  height: 100%;
+  color: black;
+  font-weight: 700;
+  pointer-events: none;
+  background: rgb(212, 198, 198);
+}
+li a {
+  color: #fff;
+}
+li:hover {
+    background: red;
+    cursor: pointer;
+}
+ul li ul {
+  background: orange;
+  visibility: hidden;
+  opacity: 0;
+  min-width: 3rem;
+  position: absolute;
+  transition: all 0.5s ease;
+  left: 0;
+  display: none;
+}
+ul li:hover > ul,
+ul li ul:hover {
+  visibility: visible;
+  opacity: 1;
+  display: block;
+}
+ul li ul li {
+  clear: both;
+  width: 100%;
+}
+
+.ClickArea {
+  width: 60%;
+  margin-top: 10px;
+  margin-left: 10px;
+  float: left;
+  height: 95%;
+}
+.Measure {
+  width: 100%;
+  height: 35%;
+  position: relative;
+  margin-bottom: 0px;
+  z-index: 1;
+}
+.Click {
+  width: 25%;
+  height: 100%;
+  position: relative;
+  float: left;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: 1;
+}
+.Click.active {
+  opacity: 1;
+  transition-duration: 0.1s;
+}
+
+/* Settings for piano */
+.Piano {
+  width: 1718px;
+  height: 250px;
+  position: relative;
+  margin-left: 18px;
+  border: medium solid;
+  background-color: rgb(83, 73, 73);
+  border-color: rgb(121, 108, 108);
+  z-index: 1;
+  cursor: default;
+}
+.PianoTitle {
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  color: rgb(202, 178, 178);
+  width: 20px;
+  position: absolute;
+  font-size: 25px;
+  font-weight: 700;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+.RecordButton {
+  position:absolute;
+  margin-top: 145px;
+  margin-left: 13px;
+  width: 30px;
+  height: 30px;
+  background: rgb(121, 108, 108);
+  border-radius: 50%;
+  border: solid rgb(202, 178, 178);
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 10;
+}
+.PlayButtonInner:hover .tooltiptext {
+  visibility: visible;
+}
+.RecordButton:hover .tooltiptext {
+  margin-left: 30px;
+  visibility: visible;
+}
+#mode:hover .tooltiptext {
+  margin-left: -50px;
+  margin-top: 30px;
+  visibility: visible;
+}
+#ClickMode:hover .tooltiptext {
+  margin-left: -80px;
+  margin-top: 30px;
+  visibility: visible;
+}
+#TimeSignature:hover .tooltiptext {
+  margin-left: -180px;
+  margin-top: 30px;
+  visibility: visible;
+}
+#Tempo { }
+#Tempo:hover .tooltiptext {
+  margin-left: -80px;
+  margin-top: 30px;
+  visibility: visible;
+}
+.Slider:hover .tooltiptext {
+  margin-left: -80px;
+  margin-top: -50px;
+  visibility: visible;
+}
+.TemperatureSlider:hover .tooltiptext {
+  margin-left: 70px;
+  margin-top: -130px;
+  visibility: visible;
+  transform: rotate(90deg);
+}
+
+.WhiteKeys {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  margin-left: 3%;
+  z-index: 1;
+}
+.WhiteKey {
+  width: 68px;
+  height: 240px;
+  margin-left: 8px;
+  position: relative;
+  float: left;
+  background-color: white;
+  transition: opacity 0.5s;
+  z-index: 1;
+}
+.WhiteKey.play {
+  background-color: green;
+  transition-duration: 0.1s;
+}
+.WhiteKey.recorded {
+  background-color: red;
+  transition-duration: 0.1s;
+}
+.WhiteKeyLetter {
+  margin-top: 220px;
+  margin-left: 30px;
+  color: black;
+  visibility: hidden;
+}
+.BlackKeys {
+  width: 90%;
+  height: 55%;
+  position: absolute;
+  margin-left: 90px;
+  z-index: 2;
+}
+.BlackKey {
+  width: 50px;
+  height: 130px;
+  margin-left: 14px;
+  margin-right: 14px;
+  position: relative;
+  float: left;
+  background-color: black;
+  transition: opacity 0.5s;
+  z-index: 2;
+}
+.BlackKey.play {
+  background-color: green;
+  transition-duration: 0.1s;
+}
+.BlackKey.recorded {
+  background-color: red;
+  transition-duration: 0.1s;
+}
+.BlackKeyLetter {
+  margin-top: 110px;
+  margin-left: 20px;
+  color: white;
+  visibility: hidden;
+}
+.EmptyKey {
+  width: 3%;
+  height: 100%;
+  margin-right: 1.71%;
+  position: relative;
+  float: left;
+  background-color: black;
+  opacity: 0;
+  z-index: 2;
+}
+.Slider {
+  position: absolute;
+  float: right;
+  margin-top: 10px;
+  margin-left: 96%;
+  width: 4%;
+  height: 220px;
+  z-index: 3;
+}
+input[type=range][orient=vertical]
+{
+  writing-mode: bt-lr; /* IE */
+  -webkit-appearance: slider-vertical; /* WebKit */
+  width: 100%;
+  height: 100%;
+  padding: 0 5px;
+}
+.TemperatureSlider {
+  position: absolute;
+  float: right;
+  margin-left: 90%;
+  margin-top: 80px;
+  width: 160px;
+  height: 4%;
+  padding: 10px 10px 20px 0px;
+  border-radius: 0 20px 20px 0;
+  background: #888;
+  transform: rotate(-90deg);
+  z-index: 3;
+}
+.TemperatureSlider input[type="range"] {
+  width: 100%;
+  height: 20px;
+  border-radius: 0 20px 20px 0;
+  background: #fff;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+.TemperatureSlider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  position: relative;
+  z-index: 3;
+  width: 5px;
+  height: 20px;
+  background: #b00;
+}
+.TemperatureSlider input[type="range"]::-webkit-slider-thumb:after {
+  background: #f55;
+  content: '';
+  width: 500px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 5px;
+  z-index: 1;
+}
+.TemperatureSlider:after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  z-index: -1;
+  top: -8px;
+  left: -45px;
+  border: 10px solid #888;
+  border-radius: 50%;
+  background: #f55;
+}
+
+/* Drums */
+.Drum.active {
+  background-color: red;
+  transition-duration: 0.1s;
+}
+.CymbalUpper.active {
+  border-bottom: 20px solid red;
+  transition-duration: 0.1s;
+}
+.CymbalLower.active {
+  border-top: 20px solid red;
+  transition-duration: 0.1s;
+}
+.Kick {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  margin-left: 50%;
+  margin-top: 130px;
+  background-color: white;
+  border-radius: 50%;
+  border: solid rgb(202, 178, 178);
+}
+.Snare {
+  position: absolute;
+  width: 90px;
+  height: 30px;
+  margin-left: 47%;
+  margin-top: 140px;
+  background-color: white;
+  border: solid rgb(202, 178, 178);
+}
+.HiHatUpperOuter {
+  width: 0;
+  height: 0;
+  border: 60px solid transparent;
+  border-bottom: 28px solid rgb(202, 178, 178);
+  position: absolute;
+  margin-top: 45px;
+  margin-left: 41.4%;
+}
+.HiHatLowerOuter {
+  content: '';
+  position: absolute;
+  margin-top: 135px;
+  margin-left: 41.4%;
+  width: 0;
+  height: 0;
+  border: 60px solid transparent;
+  border-top: 28px solid rgb(202, 178, 178);
+}
+.HiHatUpperInner {
+  width: 0;
+  height: 0;
+  border: 50px solid transparent;
+  border-bottom: 20px solid white;
+  position: absolute;
+  margin-top: 60px;
+  margin-left: 42%;
+}
+.HiHatLowerInner {
+  content: '';
+  position: absolute;
+  margin-top: 138px;
+  margin-left: 42%;
+  width: 0;
+  height: 0;
+  border: 50px solid transparent;
+  border-top: 20px solid white;
+}
+.Tom1 {
+  position: absolute;
+  width: 50px;
+  height: 25px;
+  margin-left: 49%;
+  margin-top: 100px;
+  background-color: white;
+  border: solid rgb(202, 178, 178);
+}
+.Tom2 {
+  position: absolute;
+  width: 50px;
+  height: 25px;
+  margin-left: 53.8%;
+  margin-top: 100px;
+  background-color: white;
+  border: solid rgb(202, 178, 178);
+}
+.Tom3 {
+  position: absolute;
+  width: 60px;
+  height: 70px;
+  margin-left: 57%;
+  margin-top: 140px;
+  background-color: white;
+  border: solid rgb(202, 178, 178);
+}
+.CrashOuter {
+  width: 0;
+  height: 0;
+  border: 60px solid transparent;
+  border-bottom: 28px solid rgb(202, 178, 178);
+  position: absolute;
+  margin-top: 0px;
+  margin-left: 46%;
+}
+.CrashInner {
+  width: 0;
+  height: 0;
+  border: 50px solid transparent;
+  border-bottom: 20px solid white;
+  position: absolute;
+  margin-top: 15px;
+  margin-left: 46.6%;
+}
+.RideOuter {
+  width: 0;
+  height: 0;
+  border: 60px solid transparent;
+  border-bottom: 28px solid rgb(202, 178, 178);
+  position: absolute;
+  margin-top: 0px;
+  margin-left: 54%;
+}
+.RideInner {
+  width: 0;
+  height: 0;
+  border: 50px solid transparent;
+  border-bottom: 20px solid white;
+  position: absolute;
+  margin-top: 15px;
+  margin-left: 54.6%;
+}

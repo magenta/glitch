@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>coucou 🐦</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="Channel your inner Bach, and harmonize with a machine learning model built with magenta.js.">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="horizontal hidden" id="main">
+      <div class="settings">
+        <h1>coucou 🐦</h1>  
+        <section>
+          <h2>Instruments</h2>
+          <div class="wrap-container top" id="sectionInstruments">
+            <button class="button palette voice voice0 active" onclick="activateVoice(event, 0)" aria-label="draw soprano">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/></svg>
+              <br>Soprano  
+            </button>
+            <button class="button palette voice voice1" onclick="activateVoice(event, 1)" aria-label="draw alto">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/></svg>
+              <br>Alto
+            </button>
+
+            <button class="button palette voice voice2" onclick="activateVoice(event, 2)" aria-label="draw tenor">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/></svg>
+              <br>Tenor
+            </button>
+            <button class="button palette voice voice3" onclick="activateVoice(event, 3)" aria-label="draw bass">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/></svg>
+              <br>Bass
+            </button>
+
+            <button class="button palette voice empty" onclick="activateVoice(event, -1)" aria-label="draw empty">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M497.941 273.941c18.745-18.745 18.745-49.137 0-67.882l-160-160c-18.745-18.745-49.136-18.746-67.883 0l-256 256c-18.745 18.745-18.745 49.137 0 67.882l96 96A48.004 48.004 0 0 0 144 480h356c6.627 0 12-5.373 12-12v-40c0-6.627-5.373-12-12-12H355.883l142.058-142.059zm-302.627-62.627l137.373 137.373L265.373 416H150.628l-80-80 124.686-124.686z" class=""></path></svg>
+              <br>Erase
+            </button>
+            <button class="button palette voice empty limit" onclick="activateVoice(event, -2)" aria-label="use fill selection tool to limit infilling to a specific section">
+              <span style="font-size: 16px">⇤⇥</span>
+              <br>
+              Limit fill
+            </button>
+          </div>
+        </section>
+        
+        <section id="sectionBrush">
+          <h2>Brush Size</h2>
+          <button class="pixel brush s1 active" onclick="activateBrush(event, 1)" id="defaultBrush" aria-label="switch to brush that is 1 pixel wide"></button>
+          <button class="pixel brush s2" onclick="activateBrush(event, 2)" aria-label="switch to brush that is 2 pixels wide"></button>
+          <button class="pixel brush s3" onclick="activateBrush(event, 3)" aria-label="switch to brush that is 3 pixels wide"></button>
+          <button class="pixel brush s4" onclick="activateBrush(event, 4)" aria-label="switch to brush that is 4 pixels wide"></button>
+        </section>
+      </div>
+      
+      <div class="container" id="container"></div>
+      
+      <div class="settings two">
+        <section>
+          <div id="sectionControls">
+            <h2>Controls</h2>
+            
+            <div class="wrap-container">
+              <button class="button controls special" onclick="infill()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M19.02 10v9H5V5h9V3H5.02c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-9h-2zM17 10l.94-2.06L20 7l-2.06-.94L17 4l-.94 2.06L14 7l2.06.94zm-3.75.75L12 8l-1.25 2.75L8 12l2.75 1.25L12 16l1.25-2.75L16 12z"/></svg>
+                Fill in
+              </button>
+              <button class="button controls" onclick="playOrPause()" id="btnPlay">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                Play
+              </button>
+              <button class="button controls" onclick="playOrPause()" id="btnStop" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M4.27 3L3 4.27l9 9v.28c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4v-1.73L19.73 21 21 19.73 4.27 3zM14 7h4V3h-6v5.18l2 2z"/></svg>
+                Stop
+              </button>
+              <button class="button controls" onclick="save()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+                Save
+              </button>
+              <button class="button controls" onclick="reset()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/><path fill="none" d="M0 0h24v24H0z"/></svg>
+                Reset
+              </button>
+              <button class="button controls" onclick="toggleHelp()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+                Help
+              </button>
+            </div>
+          </div>
+              
+            <div style="width:100%">
+              <h2>Temperature</h2>
+              <div>&lt;1 is more conservative, &gt;1 is more random</div>
+              <input class="button controls" id="inputTemp" type="number" min="0" max="2" step="0.1" value="0.99" aria-label="temperature control"> 
+            </div>
+
+            <h2>Scale:</h2>
+            <button class="button scale active" onclick="activateScale(event, -1)" id="defaultScale">
+              All
+            </button>
+            <button class="button scale" onclick="activateScale(event, 0)">
+              C  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 1)">
+              D  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 2)">
+              E  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 3)">
+              F  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 4)">
+              G  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 5)">
+              A  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 6)">
+              B  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 7)">
+              Cm  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 8)">
+              Dm  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 9)">
+              Em  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 10)">
+              Fm  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 11)">
+              Gm  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 12)">
+              Am  
+            </button>
+            <button class="button scale" onclick="activateScale(event, 13)">
+              Bm  
+            </button>
+        </section>
+      </div>
+    </div>
+    
+    <div id="error" class="controls" hidden></div>
+    
+    <input type="file" id="fileInput">
+    
+    <div class="dialog" id="help">
+      <h1>coucou 🐦</h1>
+      <br>
+      <p>Channel your inner Bach, and harmonize with a machine learning model!</p>
+      <hr>
+      <p>
+        The model is trained to fill in missing portions of 4-part Bach chorales. Here are a few things you can try:
+      </p>
+      <br>
+      <p>
+        <ul>
+          <li>🖌 <b>Draw</b> a melody in any of the voices (painted with different colours: <span class="pixel voice0"></span><span class="pixel voice1">
+            </span><span class="pixel voice2"></span><span class="pixel voice3"></span>). Each voice has a range and not all 
+            voices can be drawn for all the pitches (the legend on the right side should help with that!)</li>
+          <li>🎹 Have the model <b>fill in</b> voices that are missing</li>
+          <li>🔲 Use the <b>Limit fill</b> tool to mask out a section of the resulting piece and have the model to only fill in that part</li>
+        </ul>
+      </p>
+      
+      <br>
+      <button class="button controls" onclick="userSaidGo()" style="margin: 0 auto" disabled id="btnReady">
+        I'm ready!
+      </button>
+      
+      <p class="footer">
+        Built with <a target="_blank" href="https://magenta.tensorflow.org" rel="noopener">magenta.js</a>. Learn more about 
+        <a target="_blank" href="https://magenta.tensorflow.org/coconet"rel="noopener">how it works</a>,
+        or see the code on <a target="_blank" href="https://glitch.com/edit/#!/coconet" rel="noopener">Glitch</a>.
+      </p>
+    </div>
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/@magenta/music@1.7.0"></script>
+  <script src="board.js"></script>
+  <script src="script.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js" defer></script>
+</html>

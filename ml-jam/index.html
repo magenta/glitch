@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ML-Jam</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/@magenta/music@1.4.2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.0.1/Tone.min.js"></script>
+    
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+    
+    <!-- import the webpage's javascript files -->
+    <script src="/globals.js" defer></script>
+    <script src="/bass-track.js" defer></script>
+    <script src="/chords-track.js" defer></script>
+    <script src="/click-track.js" defer></script>
+    <script src="/drum-track.js" defer></script>
+    <script src="/lead-track.js" defer></script>
+    <script src="/main.js" defer></script>
+  </head>  
+  
+  <body bgcolor="#ECE7E7">
+    
+    <div id="WelcomeScreen"></div>
+    <div id="TourScreen"></div>
+    <div id="MLInfoScreen"><h2>Just a sec, ML models are thinking!</h2></div>
+    <div id="DAW">
+      <div id="Title">
+        &nbsp;&nbsp;ML-Jam
+        <div id="Author">a musical app by <a href="https://twitter.com/pcastr" target="_blank">@pcastr</a> | <a href="https://arxiv.org/abs/1904.13285" target="_blank">paper</a> | <a href="https://magenta.tensorflow.org/mljam" target="_blank">blog</a></div>
+      </div>
+    </div>
+    
+
+    <!-- include the Glitch button to show what the webpage is about and
+          to make it easier for folks to view source and remix -->
+    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
+    <script src="https://button.glitch.me/button.js"></script>
+  </body>
+</html>

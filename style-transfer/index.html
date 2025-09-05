@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Arbitrary Style Transfer</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@magenta/image@0.2.1/dist/magentaimage.min.js"></script>
+    <script src="/script.js" defer></script>
+  </head>  
+  <body>
+    <div class="container">
+      <div class="left">
+        <h1>
+          <b>Arbitrary</b> Style Transfer with <a href="https://www.npmjs.com/package/@magenta/image">magenta.js</a>
+        </h1>
+      </div>
+    </div>
+    
+    <div class="container">
+      <div class="left">
+        <div class="frame">
+          <h2>Step 1. <label>upload photo <input type="file" onchange="loadContent(event)"></label></h2>
+          <img id="content" class="image" crossorigin="anonymous" src="https://cdn.glitch.com/93893683-46da-4058-829c-a05792722f2b%2Fcontent.jpg?1545163443723"/> 
+        </div>
+        <div class="right">
+          <div class="frame">
+             <h2>Step 2. <label>upload style <input type="file" onchange="loadStyle(event)"></label></h2>
+             <img id="style" class="image" crossorigin="anonymous" src="https://cdn.glitch.com/93893683-46da-4058-829c-a05792722f2b%2Fstyle.jpg?1545163447216" />
+          </div>
+        </div>
+      </div> 
+      
+      <div class="frame">
+        <h2 class="dark">Step 3. <span id="loading">Transmogrifying ...</span><span id="ready" hidden>Profit!</span></h2>
+        <canvas id="stylized" height="250px"></canvas>
+      </div>
+    </div>
+
+  <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
+  <script src="https://button.glitch.me/button.js"></script>
+  </body>
+</html>
