@@ -39,3 +39,31 @@ for file in *.tgz; do
   rm -r "$temp_dir"
 done
 
+# After the loop, create the index.html file
+echo "Creating index.html..."
+cat > index.html <<- _EOF_
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magenta Glitch Demos</title>
+</head>
+<body>
+    <h1>Magenta Glitch Demos</h1>
+    <ul>
+_EOF_
+
+# Iterate over all directories in the current location and add them to the index
+for dir in */; do
+    # Remove the trailing slash from the directory name for the link text
+    dir_name="${dir%/}"
+    echo "        <li><a href=\"$dir\">$dir_name</a></li>" >> index.html
+done
+
+cat >> index.html <<- _EOF_
+    </ul>
+</body>
+</html>
+_EOF_
+echo "index.html created successfully."
